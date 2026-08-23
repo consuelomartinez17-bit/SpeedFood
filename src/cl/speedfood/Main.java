@@ -11,22 +11,26 @@ public class Main {
     public static void main(String[] args) {
 
         // --- Pedido de comida ---
-        Pedido pedidoComida1 = new PedidoComida("001", "Av. Siempre Viva 123", "La Pizzería", true);
+        Pedido pedidoComida1 = new PedidoComida("001", "Av. Siempre Viva 123", 4.0,"La Pizzería", true);
         pedidoComida1.asignarRepartidor();
         if (pedidoComida1 instanceof PedidoComida) {
             PedidoComida comidaEspecifico = (PedidoComida) pedidoComida1;
             comidaEspecifico.asignarRepartidor("Juan Pérez");
         }
+        pedidoComida1.mostrarResumen();
+        System.out.println("Tiempo estimado de entrega: " + pedidoComida1.calcularTiempoEntrega() + " minutos");
 
         System.out.println("-----");
 
         // --- Pedido de encomienda ---
-        Pedido pedidoEncomienda1 = new PedidoEncomienda("002", "Calle Falsa 456", 4.5, true);
+        Pedido pedidoEncomienda1 = new PedidoEncomienda("002", "Calle Falsa 456", 5.0, 4.5, true);
         pedidoEncomienda1.asignarRepartidor();
         if (pedidoEncomienda1 instanceof PedidoEncomienda) {
             PedidoEncomienda encomiendaEspecifico = (PedidoEncomienda) pedidoEncomienda1;
             encomiendaEspecifico.asignarRepartidor("María González");
         }
+        pedidoEncomienda1.mostrarResumen();
+        System.out.println("Tiempo estimado de entrega: " + pedidoEncomienda1.calcularTiempoEntrega() + " minutos");
 
         System.out.println("-----");
 
@@ -37,5 +41,7 @@ public class Main {
             PedidoExpress expressEspecifico = (PedidoExpress) pedidoExpress1;
             expressEspecifico.asignarRepartidor("Pedro Soto");
         }
+        pedidoExpress1.mostrarResumen();
+        System.out.println("Tiempo estimado de entrega: " + pedidoExpress1.calcularTiempoEntrega() + " minutos");
     }
 }

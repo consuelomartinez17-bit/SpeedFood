@@ -8,25 +8,26 @@ package cl.speedfood;
  * @version 1.0
  *
  * */
-public class Pedido {
+public abstract class Pedido {
 
-    private String idPedido;
-    private String direccionEntrega;
-    private String tipoPedido;
+    protected String idPedido;
+    protected String direccionEntrega;
+    protected double distanciaKm;
+
 
     /**
      * Constructor con parámetros.
      * Construye el pedido con parámetros específicos y comunes a todos los pedidos a repartir.
      * @param idPedido          identificador único del pedido.
      * @param direccionEntrega  dirección donde debe entregarse el pedido.
-     * @param tipoPedido        tipo de pedido (comida, encomienda o express).
+     * @param distanciaKm       distancia en kilometros que debe recorrerse hasta el lugar de entrega.
      *
      * */
 
-    public Pedido(String idPedido, String direccionEntrega, String tipoPedido) {
+    public Pedido(String idPedido, String direccionEntrega, double distanciaKm) {
         this.idPedido = idPedido;
         this.direccionEntrega = direccionEntrega;
-        this.tipoPedido = tipoPedido;
+        this.distanciaKm = distanciaKm;
     }
 
     /**
@@ -46,11 +47,23 @@ public class Pedido {
     }
 
     /**
-     * Obtiene el tipo de pedido.
-     * @return el tipo de pedido
+     * Obtiene la distancia en kilometros que debe recorrerse hasta el lugar de entrega.
+     * @return la distancia en kilometros que debe recorrerse hasta el lugar de entrega.
      * */
-    public String getTipoPedido() {
-        return tipoPedido;
+    public double getDistanciaKm() {
+        return distanciaKm;
+    }
+
+
+    /**
+     * Muestra el resumen del pedido gestionado, con el número de pedido, dirección a la cual debe ser enviado,
+     * distancia en km que deberá recorrer para llegar a destino.
+     * */
+    public void mostrarResumen(){
+        System.out.println("Pedido #" + idPedido);
+        System.out.println("Dirección: " + direccionEntrega);
+        System.out.println("Distancia: " + distanciaKm + " km");
+
     }
 
     /**
@@ -62,4 +75,12 @@ public class Pedido {
     public void asignarRepartidor(){
         System.out.println("Buscando repartidor disponible...");
     }
+
+    /**
+     * Calcula el tiempo estimado de entrega del pedido, en minutos.
+     * Cada subclase implementa su propia lógica de calculo según el tipo de pedido.
+     *
+     * @return tiempo estimado de entrega en minutos.
+     * */
+    public abstract int calcularTiempoEntrega();
 }

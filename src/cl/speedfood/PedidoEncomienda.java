@@ -20,13 +20,14 @@ public class PedidoEncomienda extends Pedido{
      * y si el pedido fue embalado correctamente.
      * @param idPedido          identificador único del pedido.
      * @param direccionEntrega  dirección donde debe entregarse el pedido.
+     * @param distanciaKm       distancia en kilometros que debe recorrerse hasta el lugar de entrega.
      * @param pesoPedido        el peso del pedido.
      * @param embalajeValidado indica si el embalaje de la encomienda cumple con las condiciones necesarias para su
      *                         transporte.
      * */
 
-    public PedidoEncomienda(String idPedido, String direccionEntrega, double pesoPedido, boolean embalajeValidado) {
-        super(idPedido, direccionEntrega, "Encomienda");
+    public PedidoEncomienda(String idPedido, String direccionEntrega, double distanciaKm, double pesoPedido, boolean embalajeValidado) {
+        super(idPedido, direccionEntrega, distanciaKm);
         this.pesoPedido = pesoPedido;
         this.embalajeValidado = embalajeValidado;
     }
@@ -73,6 +74,18 @@ public class PedidoEncomienda extends Pedido{
         } else {
             System.out.println("→ No se puede asignar a " + nombreRepartidor + ", el embalaje no está validado");
         }
+    }
+
+    /**
+     * Calcula el tiempo estimado de entrega para un pedido de encomienda.
+     * Se consideran 20 minutos base más 1.5 minutos por cada kilómetro de distancia.
+     *
+     * @return tiempo estimado de entrega en minutos.
+     *
+     * */
+    @Override
+    public int calcularTiempoEntrega(){
+        return (int) Math.round(20 + (1.5 * distanciaKm));
     }
 
 

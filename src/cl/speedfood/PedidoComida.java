@@ -21,13 +21,14 @@ public class PedidoComida extends Pedido{
      * requiere mochila termica.
      * @param idPedido          identificador único del pedido.
      * @param direccionEntrega  dirección donde debe entregarse el pedido.
+     * @param distanciaKm       distancia en kilometros que debe recorrerse hasta el lugar de entrega.
      * @param restaurante       el nombre del restaurante que envia el pedido.
      * @param requiereMochilaTermica indica si el pedido necesita ser transportado en mochila termica.
      *
      * */
 
-    public PedidoComida(String idPedido, String direccionEntrega, String restaurante, boolean requiereMochilaTermica) {
-        super(idPedido, direccionEntrega, "Comida");
+    public PedidoComida(String idPedido, String direccionEntrega, double distanciaKm, String restaurante, boolean requiereMochilaTermica) {
+        super(idPedido, direccionEntrega, distanciaKm);
         this.restaurante = restaurante;
         this.requiereMochilaTermica = requiereMochilaTermica;
     }
@@ -72,4 +73,17 @@ public class PedidoComida extends Pedido{
     public void asignarRepartidor(String nombreRepartidor){
         System.out.println("→ Pedido asignado a " + nombreRepartidor);
     }
+
+    /**
+     * Calcula el tiempo estimado de entrega para un pedido de comida.
+     * Se consideran 15 minutos base más 2 minutos por cada kilómetro de distancia.
+     *
+     * @return tiempo estimado de entrega en minutos.
+     *
+     * */
+    @Override
+    public int calcularTiempoEntrega(){
+        return (int)(15 + (2 * distanciaKm));
+    }
+
 }

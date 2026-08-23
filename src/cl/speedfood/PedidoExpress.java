@@ -1,9 +1,8 @@
 package cl.speedfood;
 
 /**
- * Clase que representa un pedido express, hereda de la clase base pedido los atributos de este y agrega los propios
- * como lo son la distancia en kilometros en la que se encuentra el repartidor, ademas de que si esta disponible para
- * hacer la entrega.
+ * Clase que representa un pedido express, hereda de la clase base pedido los atributos de este y agrega el propio
+ * como lo es si està disponible para hacer la entrega.
  *
  * @author Consuelo
  * @version 1.0
@@ -11,7 +10,6 @@ package cl.speedfood;
 
 public class PedidoExpress extends Pedido {
 
-    private double distanciaKm;
     private boolean repartidorDisponible;
 
 
@@ -20,25 +18,16 @@ public class PedidoExpress extends Pedido {
      * Construye el pedido express con los parametros heredados de pedido y agregando los propios, distancia
      * en kilometros y si el repartidor esta disponible para realizar el reparto.
      * @param idPedido              identificador único del pedido.
-     * @param direccionEntrega      dirección donde debe entregarse el pedido.
-     * @param distanciaKm           la distancia en la que se encuentra el repartidor del pedido que debe recoger.
+     * @param direccionEntrega  dirección donde debe entregarse el pedido.
+     * @param distanciaKm       distancia en kilometros que debe recorrerse hasta el lugar de entrega.
      * @param repartidorDisponible  indica si el repartidor esta disponible para hacerse cargo de ese pedido.
      * */
 
     public PedidoExpress(String idPedido, String direccionEntrega, double distanciaKm, boolean repartidorDisponible) {
-        super(idPedido, direccionEntrega, "Express");
-        this.distanciaKm = distanciaKm;
+        super(idPedido, direccionEntrega, distanciaKm);
         this.repartidorDisponible = repartidorDisponible;
     }
 
-
-    /**
-     * Obtiene la distancia en kilometros en la que se encuentra el repartidor del pedido a recoger.
-     * @return distancia en kilometros en la que se encuentra el repartidor del pedido a recoger
-     * */
-    public double getDistanciaKm() {
-        return distanciaKm;
-    }
 
     /**
      * Obtiene la indicacion si el repartidor se encuentra disponible para recoger el pedido.
@@ -74,6 +63,22 @@ public class PedidoExpress extends Pedido {
         } else {
             System.out.println("→ No se puede asignar a " + nombreRepartidor + ", no hay repartidores cerca, intentelo mas tarde. ");
         }
+    }
+
+    /**
+     * Calcula el tiempo estimado de entrega para un pedido de express.
+     * Se consideran 10 minutos base, pero si esta a mas de 5 km, se agregaran 5 min extra.
+     *
+     * @return tiempo estimado de entrega en minutos.
+     *
+     * */
+    @Override
+    public int calcularTiempoEntrega(){
+        int tiempo = 10;
+        if (distanciaKm > 5) {
+            tiempo = tiempo + 5;
+        }
+        return tiempo;
     }
 
 
