@@ -77,6 +77,15 @@ public abstract class Pedido {
     }
 
     /**
+     * Asigna un repartidor específico al pedido, de forma genérica.
+     * Las subclases sobrescriben este método para aplicar su propia lógica de validación.
+     * @param nombreRepartidor nombre del repartidor asignado al pedido.
+     * */
+    public void asignarRepartidor(String nombreRepartidor){
+        System.out.println("→ Pedido asignado a " + nombreRepartidor);
+    }
+
+    /**
      * Calcula el tiempo estimado de entrega del pedido, en minutos.
      * Cada subclase implementa su propia lógica de calculo según el tipo de pedido.
      *

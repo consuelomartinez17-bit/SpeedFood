@@ -70,6 +70,7 @@ public class PedidoComida extends Pedido{
      * @param nombreRepartidor entrega el nombre del repartidor responsable de la entrega
      *
      * */
+    @Override
     public void asignarRepartidor(String nombreRepartidor){
         System.out.println("→ Pedido asignado a " + nombreRepartidor);
     }

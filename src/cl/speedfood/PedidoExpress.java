@@ -57,6 +57,7 @@ public class PedidoExpress extends Pedido {
      * @param nombreRepartidor entrega el nombre del repartidor responsable de la entrega
      *
      * */
+    @Override
     public void asignarRepartidor(String nombreRepartidor){
         if(repartidorDisponible && distanciaKm < 5){
             System.out.println("→ Pedido asignado a " + nombreRepartidor);
