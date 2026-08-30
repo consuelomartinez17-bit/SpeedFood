@@ -1,18 +1,27 @@
 package cl.speedfood;
 
+import cl.speedfood.interfaces.Despachable;
+import cl.speedfood.interfaces.Cancelable;
+import cl.speedfood.interfaces.Rastreable;
+import java.util.List;
+import java.util.ArrayList;
+
 
 /**
  * Clase que representa el pedido de comida con los atributos heredados de la clase base pedido y ademas agregando los
- * suyos como lo son restaurante y la validacion si necesita mochila termica para el transporte.
+ * suyos como lo son restaurante, la validacion si necesita mochila termica para el transporte, el historial de envio
  *
  * @author Consuelo
  * @version 1.0
  *
  * */
-public class PedidoComida extends Pedido{
+public class PedidoComida extends Pedido implements Despachable, Cancelable, Rastreable{
 
     private String restaurante;
     private boolean requiereMochilaTermica;
+    private List<String> historial = new ArrayList<>();
+    private boolean despachado = false;
+    private boolean cancelado = false;
 
 
     /**
@@ -31,6 +40,7 @@ public class PedidoComida extends Pedido{
         super(idPedido, direccionEntrega, distanciaKm);
         this.restaurante = restaurante;
         this.requiereMochilaTermica = requiereMochilaTermica;
+        historial.add("Pedido de comida creado: " + idPedido);
     }
 
     /**
@@ -77,14 +87,76 @@ public class PedidoComida extends Pedido{
 
     /**
      * Calcula el tiempo estimado de entrega para un pedido de comida.
-     * Se consideran 15 minutos base más 2 minutos por cada kilómetro de distancia.
+     * Se consideran 15 minutos base más 2 minutos por cada kilómetro de distancia,
+     * más 3 minutos adicionales si el pedido requiere mochila térmica.
      *
      * @return tiempo estimado de entrega en minutos.
      *
      * */
     @Override
     public int calcularTiempoEntrega(){
-        return (int)(15 + (2 * distanciaKm));
+        int tiempo = (int)(15 + (2 * distanciaKm));
+        if (requiereMochilaTermica) {
+            tiempo += 3;
+        }
+        return tiempo;
     }
 
+    /**
+     * Despacha el pedido de comida, marcándolo como en ruta hacia el cliente.
+     * Si el pedido ya fue despachado anteriormente, no se realiza ninguna acción.
+     *
+     * @return true si el despacho fue exitoso, false si el pedido ya estaba despachado.
+     * */
+    @Override
+    public boolean despachar() {
+        if (cancelado) {
+            System.out.println("El pedido no puede ser despachado, fue cancelado previamente.");
+            return false;
+        }
+        if (despachado) {
+            System.out.println("El pedido ya fue despachado anteriormente.");
+            return false;
+        }
+        despachado = true;
+        System.out.println("Pedido de comida despachado correctamente.");
+        historial.add("Pedido despachado: " + idPedido);
+        return true;
+    }
+
+    /**
+     * Cancela el pedido de comida, siempre que este no haya sido despachado previamente.
+     * Registra el intento de cancelación en el historial, sea exitoso o no.
+     *
+     * @param motivo cadena que explica el motivo de la cancelación.
+     * @return true si la cancelación fue exitosa, false si el pedido ya se encontraba en ruta.
+     * */
+    @Override
+    public boolean cancelar(String motivo) {
+        if (cancelado) {
+            System.out.println("El pedido ya fue cancelado anteriormente.");
+            return false;
+        }
+        if (despachado) {
+            System.out.println("El pedido no pudo ser cancelado, ya se encuentra en ruta.");
+            historial.add("Intento de cancelación fallido: " + idPedido + ". Motivo: " + motivo);
+            return false;
+        }
+        System.out.println("El pedido ha sido cancelado correctamente. Motivo: " + motivo);
+        historial.add("Pedido cancelado: " + idPedido + ". Motivo: " + motivo);
+        cancelado = true;
+        return true;
+    }
+
+    /**
+     * Obtiene el historial de eventos registrados para este pedido de comida
+     * (creación, despacho, cancelaciones, entre otros).
+     *
+     * @return una copia de la lista de eventos del historial.
+     * */
+    @Override
+    public List<String> verHistorial() {
+        return new ArrayList<>(historial);
+
+    }
 }
