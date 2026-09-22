@@ -3,6 +3,7 @@ package cl.speedfood.gestores;
 import cl.speedfood.interfaces.Despachable;
 import cl.speedfood.interfaces.Cancelable;
 import cl.speedfood.interfaces.Rastreable;
+import cl.speedfood.modelo.Pedido;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,22 +21,34 @@ public class ControladorDeEnvios {
     private List<Despachable> despachables = new ArrayList<>();
     private List<Cancelable> cancelables = new ArrayList<>();
     private List<Rastreable> rastreables = new ArrayList<>();
-
-
-
+    private List<Pedido> pedidosRegistrados = new ArrayList<>();
 
     /**
      * Registra un pedido en el controlador, agregándolo a las listas de
-     * despachables, cancelables y rastreables, según las interfaces que implementa.
+     * despachables, cancelables, rastreables, y a la lista general de
+     * pedidos que usan las ventanas para mostrar la tabla y armar repartidores.
      *
-     * @param pedido objeto que implementa Despachable, Cancelable y Rastreable a la vez.
-     * @param <T> tipo del pedido, acotado a que implemente las tres interfaces mencionadas.
+     * @param pedido objeto que extiende {@link Pedido} e implementa Despachable,
+     *               Cancelable y Rastreable a la vez.
+     * @param <T> tipo del pedido, acotado a que sea un Pedido y a que implemente
+     *            las tres interfaces mencionadas.
      * */
-
-    public <T extends Despachable & Cancelable & Rastreable> void registrarPedido(T pedido) {
+    public <T extends Pedido & Despachable & Cancelable & Rastreable> void registrarPedido(T pedido) {
         despachables.add(pedido);
         cancelables.add(pedido);
         rastreables.add(pedido);
+        pedidosRegistrados.add(pedido);
+    }
+
+    /**
+     * Obtiene todos los pedidos registrados en el sistema, sin importar su tipo.
+     * Se usa para poblar la tabla de la vista y para armar la lista de pedidos
+     * que se le entrega a un {@link cl.speedfood.modelo.Repartidor}.
+     *
+     * @return una copia de la lista de pedidos registrados.
+     */
+    public List<Pedido> getPedidosRegistrados() {
+        return new ArrayList<>(pedidosRegistrados);
     }
 
     /**

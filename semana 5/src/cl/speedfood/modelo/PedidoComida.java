@@ -1,8 +1,9 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
 
 import cl.speedfood.interfaces.Despachable;
 import cl.speedfood.interfaces.Cancelable;
 import cl.speedfood.interfaces.Rastreable;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -131,6 +132,15 @@ public class PedidoComida extends Pedido implements Despachable, Cancelable, Ras
         System.out.println("Pedido de comida despachado correctamente.");
         historial.add("Pedido despachado: " + idPedido);
         return true;
+    }
+
+    /**
+     * Indica si el pedido ya fue despachado.
+     * @return true si el pedido ya fue despachado, false en caso contrario.
+     */
+    @Override
+    public boolean isDespachado() {
+        return despachado;
     }
 
     /**

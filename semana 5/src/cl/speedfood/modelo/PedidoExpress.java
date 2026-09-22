@@ -1,4 +1,4 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +133,15 @@ public class PedidoExpress extends Pedido implements Despachable, Cancelable, Ra
         System.out.println("Pedido de express despachado correctamente.");
         historial.add("Pedido despachado: " + idPedido);
         return true;
+    }
+
+    /**
+     * Indica si el pedido ya fue despachado.
+     * @return true si el pedido ya fue despachado, false en caso contrario.
+     */
+    @Override
+    public boolean isDespachado() {
+        return despachado;
     }
 
     /**

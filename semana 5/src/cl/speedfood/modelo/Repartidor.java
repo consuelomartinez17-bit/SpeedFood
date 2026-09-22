@@ -1,4 +1,6 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
+
+import cl.speedfood.interfaces.Despachable;
 
 import java.util.List;
 import java.util.Random;
@@ -14,34 +16,17 @@ import java.util.Random;
  * @author Consuelo
  * @version 1.0
  */
-
 public class Repartidor implements Runnable {
 
     private final String nombreRepartidor;
     private final List<Pedido> pedidosAsignados;
     private static final Random generadorAleatorio = new Random();
 
-    /**
-     * Crea un repartidor con su lista de pedidos asignados.
-     *
-     * @param nombreRepartidor nombre identificador del repartidor
-     * @param pedidosAsignados lista de pedidos que debe entregar; puede venir
-     *                         nula o vacía, en cuyo caso el repartidor no realiza entregas
-     */
     public Repartidor(String nombreRepartidor, List<Pedido> pedidosAsignados) {
         this.nombreRepartidor = nombreRepartidor;
         this.pedidosAsignados = pedidosAsignados;
     }
 
-    /**
-     * Ejecuta la entrega secuencial de los pedidos asignados al repartidor.
-     * <p>
-     * Por cada pedido, imprime el tipo de pedido y su identificador al iniciar
-     * la entrega, simula el tiempo de entrega con {@link Thread#sleep(long)}
-     * usando un valor aleatorio, y luego confirma la entrega. Si el hilo es
-     * interrumpido durante la espera, se restaura el flag de interrupción
-     * y se detiene la ejecución sin lanzar la excepción hacia arriba.
-     */
     @Override
     public void run() {
         if (pedidosAsignados == null || pedidosAsignados.isEmpty()) {
@@ -61,6 +46,12 @@ public class Repartidor implements Runnable {
                 continue;
             }
 
+            if (pedidoActual.isDespachado()) {
+                System.out.println("[Repartidor: " + nombreRepartidor + "] Pedido #"
+                        + pedidoActual.getIdPedido() + " ya había sido despachado por otro repartidor, se omite.");
+                continue;
+            }
+
             String tipoPedido = pedidoActual.getClass().getSimpleName();
 
             System.out.println("[Repartidor: " + nombreRepartidor + "] Entregando "
@@ -75,8 +66,14 @@ public class Repartidor implements Runnable {
                 return;
             }
 
-            System.out.println("[Repartidor: " + nombreRepartidor + "] Pedido #"
-                    + pedidoActual.getIdPedido() + " entregado.");
+            if (pedidoActual instanceof Despachable pedidoDespachable && pedidoDespachable.despachar()) {
+                System.out.println("[Repartidor: " + nombreRepartidor + "] Pedido #"
+                        + pedidoActual.getIdPedido() + " entregado.");
+            } else {
+                System.out.println("[Repartidor: " + nombreRepartidor + "] Pedido #"
+                        + pedidoActual.getIdPedido() + " no se pudo despachar (otro repartidor llegó primero, "
+                        + "el pedido fue cancelado mientras viajaba, o no cumple sus condiciones de despacho).");
+            }
         }
     }
 }

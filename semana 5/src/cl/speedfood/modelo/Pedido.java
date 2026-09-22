@@ -1,4 +1,4 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
 
 /**
  * Clase base que representa un pedido genérico dentro del sistema de reparto SpeedFood.
@@ -110,6 +110,14 @@ public abstract class Pedido {
      * @return true si el pedido se encuentra cancelado, false en caso contrario.
      */
     public abstract boolean isCancelado();
+
+    /**
+     * Indica si el pedido ya fue despachado (entregado al repartidor y en ruta).
+     * Un pedido despachado no puede volver a despacharse ni cancelarse.
+     *
+     * @return true si el pedido ya fue despachado, false en caso contrario.
+     */
+    public abstract boolean isDespachado();
 
     /**
      * Normaliza el motivo de cancelación, evitando registrar "null" o vacíos
