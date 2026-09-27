@@ -153,7 +153,7 @@ suman como paquetes nuevos sin modificar la organización previa del modelo.
 1. Clonar o descomprimir el proyecto.
 2. Abrir la carpeta en IntelliJ IDEA.
 3. Ejecutar `cl.speedfood.main.Main` para la interfaz gráfica con persistencia JDBC
-      (Semana 6 y 7), o `cl.speedfood.zonacarga.Main` para la simulación de la Semana
+      (Semana 6 y 7), o `cl.speedfood.zonacarga.Main` para la simulación de la Semana 5.
 
 ## Autor
 
