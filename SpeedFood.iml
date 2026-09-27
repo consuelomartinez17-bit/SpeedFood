@@ -6,9 +6,10 @@
       <sourceFolder url="file://$MODULE_DIR$/semana 6/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/semana 3" />
       <excludeFolder url="file://$MODULE_DIR$/semana 5/src" />
-      <excludeFolder url="file://$MODULE_DIR$/src" />
+      <excludeFolder url="file://$MODULE_DIR$/semana 6" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="mysql.connector.java" level="project" />
   </component>
 </module>

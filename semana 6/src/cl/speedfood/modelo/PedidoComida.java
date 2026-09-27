@@ -1,8 +1,9 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
 
 import cl.speedfood.interfaces.Despachable;
 import cl.speedfood.interfaces.Cancelable;
 import cl.speedfood.interfaces.Rastreable;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -118,7 +119,7 @@ public class PedidoComida extends Pedido implements Despachable, Cancelable, Ras
      * @return true si el despacho fue exitoso, false si el pedido ya estaba despachado.
      * */
     @Override
-    public boolean despachar() {
+    public synchronized boolean despachar() {
         if (cancelado) {
             System.out.println("El pedido no puede ser despachado, fue cancelado previamente.");
             return false;
@@ -134,6 +135,15 @@ public class PedidoComida extends Pedido implements Despachable, Cancelable, Ras
     }
 
     /**
+     * Indica si el pedido ya fue despachado.
+     * @return true si el pedido ya fue despachado, false en caso contrario.
+     */
+    @Override
+    public boolean isDespachado() {
+        return despachado;
+    }
+
+    /**
      * Cancela el pedido de comida, siempre que este no haya sido despachado previamente.
      * Registra el intento de cancelación en el historial, sea exitoso o no.
      *
@@ -141,7 +151,7 @@ public class PedidoComida extends Pedido implements Despachable, Cancelable, Ras
      * @return true si la cancelación fue exitosa, false si el pedido ya se encontraba en ruta.
      * */
     @Override
-    public boolean cancelar(String motivo) {
+    public synchronized boolean cancelar(String motivo) {
         motivo = normalizarMotivo(motivo);
 
         if (cancelado) {

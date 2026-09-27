@@ -1,4 +1,4 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
 
 /**
  * Clase base que representa un pedido genérico dentro del sistema de reparto SpeedFood.
@@ -13,6 +13,14 @@ public abstract class Pedido {
     protected String idPedido;
     protected String direccionEntrega;
     protected double distanciaKm;
+
+    /**
+     * Id que este pedido tiene en la tabla 'pedido' de la base de datos
+     * (distinto de {@link #idPedido}, que es el identificador de negocio
+     * escrito por quien registra el pedido). Vale -1 mientras el pedido
+     * todavía no se ha guardado en la base de datos.
+     */
+    private int idBd = -1;
 
 
     /**
@@ -65,6 +73,22 @@ public abstract class Pedido {
         return distanciaKm;
     }
 
+    /**
+     * Obtiene el id que este pedido tiene en la base de datos.
+     * @return el id en la base de datos, o -1 si el pedido aún no se ha guardado.
+     * */
+    public int getIdBd() {
+        return idBd;
+    }
+
+    /**
+     * Asigna el id que la base de datos generó para este pedido al guardarlo.
+     * @param idBd id generado por MySQL al insertar el pedido.
+     * */
+    public void setIdBd(int idBd) {
+        this.idBd = idBd;
+    }
+
 
     /**
      * Muestra el resumen del pedido gestionado, con el número de pedido, dirección a la cual debe ser enviado,
@@ -110,6 +134,14 @@ public abstract class Pedido {
      * @return true si el pedido se encuentra cancelado, false en caso contrario.
      */
     public abstract boolean isCancelado();
+
+    /**
+     * Indica si el pedido ya fue despachado (entregado al repartidor y en ruta).
+     * Un pedido despachado no puede volver a despacharse ni cancelarse.
+     *
+     * @return true si el pedido ya fue despachado, false en caso contrario.
+     */
+    public abstract boolean isDespachado();
 
     /**
      * Normaliza el motivo de cancelación, evitando registrar "null" o vacíos

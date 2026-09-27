@@ -1,4 +1,4 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +115,7 @@ public class PedidoExpress extends Pedido implements Despachable, Cancelable, Ra
      * o si no hay repartidor para realizar el despacho.
      * */
     @Override
-    public boolean despachar() {
+    public synchronized boolean despachar() {
         if (cancelado) {
             System.out.println("El pedido no puede ser despachado, fue cancelado previamente.");
             return false;
@@ -136,6 +136,15 @@ public class PedidoExpress extends Pedido implements Despachable, Cancelable, Ra
     }
 
     /**
+     * Indica si el pedido ya fue despachado.
+     * @return true si el pedido ya fue despachado, false en caso contrario.
+     */
+    @Override
+    public boolean isDespachado() {
+        return despachado;
+    }
+
+    /**
      * Cancela el pedido express, siempre que este no haya sido despachado previamente.
      * Registra el intento de cancelación en el historial, sea exitoso o no.
      *
@@ -143,7 +152,7 @@ public class PedidoExpress extends Pedido implements Despachable, Cancelable, Ra
      * @return true si la cancelación fue exitosa, false si el pedido ya se encontraba en ruta.
      * */
     @Override
-    public boolean cancelar(String motivo) {
+    public synchronized boolean cancelar(String motivo) {
         motivo = normalizarMotivo(motivo);
 
         if (cancelado) {

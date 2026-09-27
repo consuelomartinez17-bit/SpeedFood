@@ -1,4 +1,4 @@
-package cl.speedfood;
+package cl.speedfood.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +122,7 @@ public class PedidoEncomienda extends Pedido implements Despachable, Cancelable,
      * o si el embalaje no está validado.
      * */
     @Override
-    public boolean despachar() {
+    public synchronized boolean despachar() {
         if (cancelado) {
             System.out.println("El pedido no puede ser despachado, fue cancelado previamente.");
             return false;
@@ -143,6 +143,15 @@ public class PedidoEncomienda extends Pedido implements Despachable, Cancelable,
     }
 
     /**
+     * Indica si el pedido ya fue despachado.
+     * @return true si el pedido ya fue despachado, false en caso contrario.
+     */
+    @Override
+    public boolean isDespachado() {
+        return despachado;
+    }
+
+    /**
      * Cancela el pedido de encomienda, siempre que este no haya sido despachado previamente.
      * Registra el intento de cancelación en el historial, sea exitoso o no.
      *
@@ -150,7 +159,7 @@ public class PedidoEncomienda extends Pedido implements Despachable, Cancelable,
      * @return true si la cancelación fue exitosa, false si el pedido ya se encontraba en ruta.
      * */
     @Override
-    public boolean cancelar(String motivo) {
+    public synchronized boolean cancelar(String motivo) {
         motivo = normalizarMotivo(motivo);
 
         if (cancelado) {
