@@ -11,9 +11,9 @@ según sus características propias.
 
 ## Estructura del repositorio
 
-- **semana 3/**: entrega archivada correspondiente a la Semana 3 (jerarquía de clases, polimorfismo e interfaces).
-- **semana 4/**: entrega archivada correspondiente a la Semana 4 (concurrencia básica con Repartidor y ExecutorService).
-- **src/**: código fuente activo, con las entregas de Semana 3, 4, 5 y 6 integradas.
+- **semana 3/**, **semana 4/**, **semana 5/**: entregas archivadas de esas semanas.
+- **semana 6/src/**: código fuente activo del proyecto, con las entregas de Semana 3
+  a 7 integradas (interfaz gráfica más persistencia JDBC).
 
 ## Estructura de clases (paquete `cl.speedfood`)
 
@@ -92,6 +92,33 @@ segundo recibe `false`, reportando la entrega como omitida en la consola en vez 
 duplicarla — el mismo principio de protección de un recurso compartido aplicado en la
 `ZonaDeCarga` de la Semana 5, ahora en el contexto de la interfaz gráfica.
 
+## Persistencia con JDBC — Semana 7 (paquete `cl.speedfood.dao`)
+
+Se agregó persistencia real en una base de datos **MySQL** (`speedfast_db`), de manera
+que los pedidos, repartidores y entregas registrados desde la interfaz gráfica de la
+Semana 6 queden guardados más allá de la sesión en memoria.
+
+- **ConexionDB**: gestiona la conexión a la base de datos mediante `DriverManager`,
+  centralizando la URL, usuario y contraseña en un solo lugar.
+- **Pedido, Repartidor, Entrega** (fila de base de datos): representan directamente una
+  fila de sus respectivas tablas (`pedido`, `repartidor`, `entrega`), sin lógica de
+  negocio, para no mezclarse con las clases de `cl.speedfood.modelo` que sí la tienen.
+- **PedidoDAO**: `guardar(Pedido)` inserta un pedido nuevo mediante `PreparedStatement`
+  y retorna el id generado por MySQL; `listarTodos()` consulta todos los pedidos
+  almacenados mediante `ResultSet`.
+- **RepartidorDAO**: `guardar(Repartidor)` inserta un repartidor nuevo y retorna su id
+  generado; `listarTodos()` consulta todos los repartidores almacenados.
+- **EntregaDAO**: `guardar(Entrega)` inserta la relación entre un pedido y el repartidor
+  que lo entrega, usando los ids generados por las otras dos tablas.
+
+**Integración con la interfaz gráfica:** `VentanaRegistroPedido` guarda cada pedido nuevo
+tanto en memoria (como antes) como en la base de datos, guardando el id generado en el
+propio objeto `Pedido` mediante un nuevo campo `idBd`. `VentanaListaPedidos` ya no lee
+de `ControladorDeEnvios`, sino que consulta directamente `PedidoDAO.listarTodos()`, para
+mostrar los pedidos realmente persistidos. Al asignar un repartidor desde
+`VentanaPrincipal`, se guarda el repartidor en la base de datos y se registra la entrega
+correspondiente, relacionando ambos ids.
+
 ## Diagrama de clases
 
 ![Diagrama de clases](diagrama-clases-speedfood.png)
@@ -125,7 +152,8 @@ suman como paquetes nuevos sin modificar la organización previa del modelo.
 
 1. Clonar o descomprimir el proyecto.
 2. Abrir la carpeta en IntelliJ IDEA.
-3. Ejecutar `cl.speedfood.Main` para las entregas de Semana 3 y 4, `cl.speedfood.zonacarga.Main` para la Semana 5, o `cl.speedfood.main.Main` para la interfaz gráfica de la Semana 6.
+3. Ejecutar `cl.speedfood.main.Main` para la interfaz gráfica con persistencia JDBC
+      (Semana 6 y 7), o `cl.speedfood.zonacarga.Main` para la simulación de la Semana
 
 ## Autor
 
